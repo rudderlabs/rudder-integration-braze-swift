@@ -19,7 +19,7 @@ PODS:
   - RudderBraze (1.0.0):
     - Appboy-iOS-SDK (~> 4.4.2)
     - RudderStack
-  - RudderStack (1.0.0-beta.2)
+  - RudderStack (1.0.0-beta.3)
   - SDWebImage (5.12.5):
     - SDWebImage/Core (= 5.12.5)
   - SDWebImage/Core (5.12.5)
@@ -27,7 +27,7 @@ PODS:
 DEPENDENCIES:
   - Appboy-iOS-SDK (~> 4.4.2)
   - RudderBraze (from `.`)
-  - RudderStack (from `~/Documents/Rudder/RudderStack-Cocoa/`)
+  - RudderStack (from `~/Documents/Rudder/RudderStack-Swift/`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -38,14 +38,14 @@ EXTERNAL SOURCES:
   RudderBraze:
     :path: "."
   RudderStack:
-    :path: "~/Documents/Rudder/RudderStack-Cocoa/"
+    :path: "~/Documents/Rudder/RudderStack-Swift/"
 
 SPEC CHECKSUMS:
   Appboy-iOS-SDK: 4a7dfe908639da81e5e85849355f6066b58b4cc6
-  RudderBraze: d3f9605a5a7b3963201e128e3f8a95c29087a616
-  RudderStack: a8d61f92379d6b230a6c7ff302e7f923db5329fc
+  RudderBraze: d6aa8de27ac351060754652831fb04bb9782cd66
+  RudderStack: 7e120a03736b0021f56a504c0966b95ffa9f5bcb
   SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
 
-PODFILE CHECKSUM: a0463afd3d440c08a4d7ea8627d7f959c7321a6e
+PODFILE CHECKSUM: c0311ae35c3566e6c7a7ebe88d1d22edc0787346
 
 COCOAPODS: 1.11.2

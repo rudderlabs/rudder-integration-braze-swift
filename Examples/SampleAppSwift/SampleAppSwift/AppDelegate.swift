@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         client = RSClient(config: config)
 
-        client?.add(destination: RudderBrazeDestination())
+        client?.addDestination(RudderBrazeDestination())
         
         return true
     }

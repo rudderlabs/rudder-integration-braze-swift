@@ -8,7 +8,7 @@
 #import "AppDelegate.h"
 
 @import RudderStack;
-@import RudderAdjust;
+@import RudderBraze;
 
 @interface AppDelegate ()
 
@@ -27,14 +27,14 @@
     
     RSClient *client = [[RSClient alloc] initWithConfig:config];
     
-    [client addWithDestination:[[RudderAdjustDestination alloc] init]];
-    [client track:@"Track 1" properties:NULL option:NULL];
+    [client addDestination:[[RudderBrazeDestination alloc] init]];
+    [client track:@"Track 1"];
     
-    [client identify:@"test_user_id" traits:NULL option:NULL];
+    [client identify:@"test_user_id"];
     
-    [client track:@"daily_rewards_claim" properties:NULL option:NULL];
-    [client track:@"level_up" properties:NULL option:NULL];
-    [client track:@"revenue" properties:NULL option:NULL];
+    [client track:@"daily_rewards_claim"];
+    [client track:@"level_up"];
+    [client track:@"revenue"];
     
     return YES;
 }
