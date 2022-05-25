@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 
-@import RudderStack;
+@import Rudder;
 @import RudderBraze;
 
 @interface AppDelegate ()
@@ -25,7 +25,8 @@
     [config trackLifecycleEvents:YES];
     [config recordScreenViews:YES];
     
-    RSClient *client = [[RSClient alloc] initWithConfig:config];
+    RSClient *client = [RSClient sharedInstance];
+    [client configureWith:config];
     
     [client addDestination:[[RudderBrazeDestination alloc] init]];
     [client track:@"Track 1"];

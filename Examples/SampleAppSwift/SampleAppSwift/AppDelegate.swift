@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import RudderStack
+import Rudder
 import RudderBraze
 
 @UIApplicationMain
@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .trackLifecycleEvents(true)
             .recordScreenViews(true)
         
-        client = RSClient(config: config)
+        client = RSClient.sharedInstance()
+        RSClient.sharedInstance().configure(with: config)
 
         client?.addDestination(RudderBrazeDestination())
         
