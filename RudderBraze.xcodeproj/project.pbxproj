@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C5323315EEFC266C51490C7F /* Pods_RudderBraze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7137C5F857EA09B0E5A3906A /* Pods_RudderBraze.framework */; };
+		5D7131CFB14D357E88EB8C90 /* Pods_RudderBraze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8E06D351BC2E7AD904CBD93 /* Pods_RudderBraze.framework */; };
 		ED2A28F82770570400646788 /* RudderBraze.h in Headers */ = {isa = PBXBuildFile; fileRef = ED2A28F72770570400646788 /* RudderBraze.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EDF68FE727D1FD620005AAC6 /* RSBrazeDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF68FE627D1FD620005AAC6 /* RSBrazeDestination.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7137C5F857EA09B0E5A3906A /* Pods_RudderBraze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RudderBraze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		90D40A22574B670BA71BE4B6 /* Pods-RudderBraze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.release.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.release.xcconfig"; sourceTree = "<group>"; };
-		DB26950373777BDE928B93F4 /* Pods-RudderBraze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.debug.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.debug.xcconfig"; sourceTree = "<group>"; };
+		98603F9DFE91C89BC01A7FC2 /* Pods-RudderBraze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.release.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.release.xcconfig"; sourceTree = "<group>"; };
+		B8E06D351BC2E7AD904CBD93 /* Pods_RudderBraze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RudderBraze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D494C2F9E5F792AF26524164 /* Pods-RudderBraze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.debug.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.debug.xcconfig"; sourceTree = "<group>"; };
 		ED2A28EB2770560400646788 /* RudderBraze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RudderBraze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2A28F72770570400646788 /* RudderBraze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RudderBraze.h; sourceTree = "<group>"; };
 		ED2A28FA2770591E00646788 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -31,28 +31,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5323315EEFC266C51490C7F /* Pods_RudderBraze.framework in Frameworks */,
+				5D7131CFB14D357E88EB8C90 /* Pods_RudderBraze.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A19BCC77146389447360307 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B8E06D351BC2E7AD904CBD93 /* Pods_RudderBraze.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		208F25C796D8593BF8DAB48E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DB26950373777BDE928B93F4 /* Pods-RudderBraze.debug.xcconfig */,
-				90D40A22574B670BA71BE4B6 /* Pods-RudderBraze.release.xcconfig */,
+				D494C2F9E5F792AF26524164 /* Pods-RudderBraze.debug.xcconfig */,
+				98603F9DFE91C89BC01A7FC2 /* Pods-RudderBraze.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		830DB137B7BA4C7789918434 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7137C5F857EA09B0E5A3906A /* Pods_RudderBraze.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		ED2A28E12770560400646788 = {
@@ -66,7 +66,7 @@
 				ED2A28F52770570400646788 /* Sources */,
 				ED2A28EC2770560400646788 /* Products */,
 				208F25C796D8593BF8DAB48E /* Pods */,
-				830DB137B7BA4C7789918434 /* Frameworks */,
+				1A19BCC77146389447360307 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,7 +121,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ED2A28F22770560400646788 /* Build configuration list for PBXNativeTarget "RudderBraze" */;
 			buildPhases = (
-				41C5F5F005B081E437D7F14B /* [CP] Check Pods Manifest.lock */,
+				E186C8D70B43F33EC6A390F0 /* [CP] Check Pods Manifest.lock */,
 				ED2A28E62770560400646788 /* Headers */,
 				ED2A28E72770560400646788 /* Sources */,
 				ED2A28E82770560400646788 /* Frameworks */,
@@ -181,7 +181,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		41C5F5F005B081E437D7F14B /* [CP] Check Pods Manifest.lock */ = {
+		E186C8D70B43F33EC6A390F0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -359,7 +359,7 @@
 		};
 		ED2A28F32770560400646788 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB26950373777BDE928B93F4 /* Pods-RudderBraze.debug.xcconfig */;
+			baseConfigurationReference = D494C2F9E5F792AF26524164 /* Pods-RudderBraze.debug.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -392,7 +392,7 @@
 		};
 		ED2A28F42770560400646788 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 90D40A22574B670BA71BE4B6 /* Pods-RudderBraze.release.xcconfig */;
+			baseConfigurationReference = 98603F9DFE91C89BC01A7FC2 /* Pods-RudderBraze.release.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;

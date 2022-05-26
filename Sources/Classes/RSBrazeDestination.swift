@@ -158,7 +158,25 @@ class RSBrazeDestination: RSDestinationPlugin {
             Appboy.sharedInstance()?.logCustomEvent(message.event, withProperties: message.properties)
         }
         return message
-    }    
+    }
+    
+    func flush() {
+        Appboy.sharedInstance()?.requestImmediateDataFlush()
+    }
+}
+
+extension RSBrazeDestination: RSPushNotifications {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Appboy.sharedInstance()?.registerDeviceToken(deviceToken)
+    }
+        
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        Appboy.sharedInstance()?.register(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        Appboy.sharedInstance()?.userNotificationCenter(center, didReceive: response, withCompletionHandler: completionHandler)
+    }
 }
 
 // MARK: - Support methods
