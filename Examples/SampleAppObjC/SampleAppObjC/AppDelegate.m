@@ -37,9 +37,30 @@
     [client track:@"level_up"];
     [client track:@"revenue"];
     
+    [self setupPushCategories];
+    
     return YES;
 }
 
+-(void) setupPushCategories {
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
+      UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+      center.delegate = self;
+      UNAuthorizationOptions options = UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge;
+      if (@available(iOS 12.0, *)) {
+      options = options | UNAuthorizationOptionProvisional;
+      }
+      [center requestAuthorizationWithOptions:options
+                            completionHandler:^(BOOL granted, NSError * _Nullable error) {
+          [[RSClient sharedInstance] pushAuthorizationFromUserNotificationCenter:granted];
+      }];
+      [[UIApplication sharedApplication] registerForRemoteNotifications];
+    } else {
+      UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
+      [[UIApplication sharedApplication] registerForRemoteNotifications];
+      [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+}
 
 #pragma mark - UISceneSession lifecycle
 
