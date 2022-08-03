@@ -157,7 +157,7 @@ class RSBrazeDestination: RSDestinationPlugin {
                     return message
                 }
                 // If product array is not present
-                else if let brazeList = get(properties: properties), let revenue = brazeList.revenue {
+                else if let brazeList = getPurchase(from: properties), let revenue = brazeList.revenue {
                     Appboy.sharedInstance()?.logPurchase(message.event, inCurrency: brazeList.currency, atPrice: NSDecimalNumber(value: revenue), withQuantity: 1, andProperties: brazeList.properties)
                     return message
                 }
@@ -215,7 +215,7 @@ extension RSBrazeDestination {
                     case RSKeys.Ecommerce.productId:
                         brazePurchase.productId = "\(value)"
                     case RSKeys.Ecommerce.quantity:
-                        brazePurchase.quantity = Int("\(value)")
+                        brazePurchase.quantity = Int("\(value)") ?? 1
                     case RSKeys.Ecommerce.price:
                         brazePurchase.price = Double("\(value)")
                     default:
@@ -275,7 +275,7 @@ extension RSBrazeDestination {
 struct BrazePurchase {
     var productId: String?
     var price: Double?
-    var quantity: Int? = 1
+    var quantity: Int = 1
     var revenue: Double?
     var currency: String = "USD"
     var properties: [String: Any]?
