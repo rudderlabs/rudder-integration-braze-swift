@@ -256,7 +256,7 @@ extension RSBrazeDestination {
         return brazePurchaseList.isEmpty ? nil : brazePurchaseList
     }
     
-    func get(properties: [String: Any]) -> BrazePurchase? {
+    func getPurchase(from properties: [String: Any]) -> BrazePurchase? {
         var brazePurchaseList = BrazePurchase()
         var tempProperties = [String: Any]()
         for (key, value) in properties {
