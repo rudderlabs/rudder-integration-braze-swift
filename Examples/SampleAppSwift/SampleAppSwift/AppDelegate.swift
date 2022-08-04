@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         RSClient.sharedInstance().configure(with: config)
 
         client?.addDestination(RudderBrazeDestination())
-        client?.track("Last event")
+        
 //        setupPushCategories()
 //        sendEvents()
         return true

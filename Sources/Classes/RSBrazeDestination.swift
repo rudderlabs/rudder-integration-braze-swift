@@ -46,6 +46,7 @@ class RSBrazeDestination: RSDestinationPlugin {
             default: break
             }
             
+            // Refer here: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/initial_sdk_setup/other_sdk_customizations/#setting-log-level
             appboyOptions[ABKLogLevelKey] = getLogLevel(from: client?.configuration?.logLevel)
             
             Appboy.start(withApiKey: brazeConfig.appKey, in: UIApplication.shared, withLaunchOptions: nil, withAppboyOptions: appboyOptions)
