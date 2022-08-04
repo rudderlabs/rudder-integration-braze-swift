@@ -22,7 +22,7 @@ class RSBrazeDestination: RSDestinationPlugin {
             return
         }
         if !brazeConfig.appKey.isEmpty {
-            var appboyOptions = [String: String]()
+            var appboyOptions = [String: Any]()
             let customEndpoint = brazeConfig.dataCenter.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             switch customEndpoint {
             case "US-01":
@@ -45,6 +45,9 @@ class RSBrazeDestination: RSDestinationPlugin {
                 appboyOptions[ABKEndpointKey] = "sdk.fra-02.braze.com"
             default: break
             }
+            
+            appboyOptions[ABKLogLevelKey] = getLogLevel(from: client?.configuration?.logLevel)
+            
             Appboy.start(withApiKey: brazeConfig.appKey, in: UIApplication.shared, withLaunchOptions: nil, withAppboyOptions: appboyOptions)
             client?.log(message: "Initializing Braze SDK.", logLevel: .debug)
         }
@@ -75,13 +78,6 @@ class RSBrazeDestination: RSDestinationPlugin {
             if let birthday = traits[RSKeys.Identify.Traits.birthday] as? String, let date: Date = dateFrom(isoDateString: birthday) {
                 Appboy.sharedInstance()?.user.dateOfBirth = date
             }
-//            if let birthday = traits[RSKeys.Identify.Traits.birthday] as? String {
-//                let dateFormatter = DateFormatter()
-//                dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-//                print(dateFormatter.date(from: birthday))
-//                Appboy.sharedInstance()?.user.dateOfBirth = dateFormatter.date(from: birthday)
-//            }
             if let gender = traits[RSKeys.Identify.Traits.gender] as? String {
                 switch gender.lowercased() {
                 case "m", "male":
@@ -210,6 +206,23 @@ extension RSBrazeDestination {
     var TRACK_RESERVED_KEYWORDS: [String] {
         // Refer: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/analytics/logging_purchases/#reserved-keys
         return [RSKeys.Ecommerce.productId, RSKeys.Ecommerce.quantity, RSKeys.Ecommerce.price, RSKeys.Ecommerce.products, RSKeys.Ecommerce.currency]
+    }
+    
+    func getLogLevel(from rsLogLevel: RSLogLevel?) -> Int {
+        switch rsLogLevel {
+        case .verbose:
+            return 0
+        case .debug:
+            return 1
+        case .info:
+            return 1
+        case .warning:
+            return 2
+        case .error:
+            return 4
+        default:
+            return 8
+        }
     }
     
     func dateFrom(isoDateString: String?) -> Date? {
