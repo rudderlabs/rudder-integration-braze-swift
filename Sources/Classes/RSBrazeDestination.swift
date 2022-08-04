@@ -160,12 +160,11 @@ class RSBrazeDestination: RSDestinationPlugin {
                         guard let productId = product.productId, let price = product.price else {
                             continue
                         }
-                        /// For `logPurchase` API refer to the Braze document: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/analytics/logging_purchases/#tracking-purchases-and-revenue
+                        // For logPurchase API refer to the Braze document: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/analytics/logging_purchases/#tracking-purchases-and-revenue
                         Appboy.sharedInstance()?.logPurchase(productId, inCurrency: product.currency, atPrice: NSDecimalNumber(value: price), withQuantity: UInt(product.quantity), andProperties: product.properties)
                     }
                     return message
-                }
-                else if let brazeList = getPurchase(from: properties),
+                } else if let brazeList = getPurchase(from: properties),
                             let revenue = brazeList.revenue {
                     Appboy.sharedInstance()?.logPurchase(message.event, inCurrency: brazeList.currency, atPrice: NSDecimalNumber(value: revenue), withQuantity: 1, andProperties: brazeList.properties)
                     return message
@@ -224,7 +223,7 @@ extension RSBrazeDestination {
         return nil
     }
         
-    func getProductList(properties: [String: Any]) -> [BrazePurchase]? {
+    func getProductList(properties: [String: Any]) -> [BrazePurchase]? { // swiftlint:disable:this cyclomatic_complexity
         var brazePurchaseList = [BrazePurchase]()
         if let products = properties[RSKeys.Ecommerce.products] as? [[String: Any]], !products.isEmpty {
             for product in products {
@@ -254,21 +253,25 @@ extension RSBrazeDestination {
             return nil
         }
         
-        var tempProperties = [String: Any]()
-        for (key, value) in properties {
-            if TRACK_RESERVED_KEYWORDS.contains(key) {
-                continue
+        func getProperty(properties: [String: Any]) -> [String: Any] {
+            var tempProperties = [String: Any]()
+            for (key, value) in properties {
+                if TRACK_RESERVED_KEYWORDS.contains(key) {
+                    continue
+                }
+                switch key {
+                case RSKeys.Ecommerce.revenue, RSKeys.Ecommerce.value, RSKeys.Ecommerce.total:
+                    tempProperties[RSKeys.Ecommerce.revenue] = Double("\(value)")
+                default:
+                    tempProperties[key] = value
+                }
             }
-            switch key {
-            case RSKeys.Ecommerce.revenue, RSKeys.Ecommerce.value, RSKeys.Ecommerce.total:
-                tempProperties[RSKeys.Ecommerce.revenue] = Double("\(value)")
-            default:
-                tempProperties[key] = value
-            }
+            return tempProperties
         }
+        let tempProperties = getProperty(properties: properties)
         
         // Update the properties for each product in the products array.
-        for (index, _) in brazePurchaseList.enumerated() {
+        for index in brazePurchaseList.indices {
             brazePurchaseList[index].properties = brazePurchaseList[index].properties?
                 .merging(tempProperties, uniquingKeysWith: { (_, last) in last }) ?? tempProperties
             // Currency should be an ISO 4217 currency code.
@@ -276,7 +279,7 @@ extension RSBrazeDestination {
                 brazePurchaseList[index].currency = currency
             }
         }
-        return brazePurchaseList.isEmpty ? nil : brazePurchaseList
+        return brazePurchaseList
     }
     
     func getPurchase(from properties: [String: Any]) -> BrazePurchase? {
