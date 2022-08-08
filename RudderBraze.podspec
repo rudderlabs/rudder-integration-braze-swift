@@ -19,6 +19,6 @@ Rudder is a platform for collecting, storing and routing customer event data to 
     s.module_name = 'RudderBraze'
     s.swift_version = '5.3'
 
-    s.dependency 'Rudder', '~> 2.0.0'
-    s.dependency 'Appboy-iOS-SDK', '~> 4.4.2'
+    s.dependency 'Rudder', '~> 2.2.4'
+    s.dependency 'Appboy-iOS-SDK', '~> 4.4.4'
 end

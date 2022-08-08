@@ -22,8 +22,9 @@ class RSBrazeDestination: RSDestinationPlugin {
             return
         }
         if !brazeConfig.appKey.isEmpty {
-            var appboyOptions = [String: String]()
-            switch brazeConfig.dataCenter {
+            var appboyOptions = [String: Any]()
+            let customEndpoint = brazeConfig.dataCenter.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            switch customEndpoint {
             case "US-01":
                 appboyOptions[ABKEndpointKey] = "sdk.iad-01.braze.com"
             case "US-02":
@@ -44,15 +45,20 @@ class RSBrazeDestination: RSDestinationPlugin {
                 appboyOptions[ABKEndpointKey] = "sdk.fra-02.braze.com"
             default: break
             }
+            
+            // Refer here: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/initial_sdk_setup/other_sdk_customizations/#setting-log-level
+            appboyOptions[ABKLogLevelKey] = getLogLevel(from: client?.configuration?.logLevel)
+            
             Appboy.start(withApiKey: brazeConfig.appKey, in: UIApplication.shared, withLaunchOptions: nil, withAppboyOptions: appboyOptions)
+            client?.log(message: "Initializing Braze SDK.", logLevel: .debug)
         }
     }
     
     func identify(message: IdentifyMessage) -> IdentifyMessage? { // swiftlint:disable:this cyclomatic_complexity function_body_length
-        if let userId = message.userId {
+        if let userId = message.userId, !userId.isEmpty {
             Appboy.sharedInstance()?.changeUser(userId)
         } else {
-            if let externalIds = message.context?["externalId"] as? [[String: String]] {
+            if let externalIds = message.context?[RSKeys.Other.externalId] as? [[String: String]] {
                 if let externalIdDict = externalIds.first(where: { dict in
                     return dict["type"] == "brazeExternalId"
                 }), let id = externalIdDict["id"] {
@@ -70,11 +76,8 @@ class RSBrazeDestination: RSDestinationPlugin {
             if let firstName = traits[RSKeys.Identify.Traits.firstName] as? String {
                 Appboy.sharedInstance()?.user.firstName = firstName
             }
-            if let birthday = traits[RSKeys.Identify.Traits.birthday] as? String {
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-                Appboy.sharedInstance()?.user.dateOfBirth = dateFormatter.date(from: birthday)
+            if let birthday = traits[RSKeys.Identify.Traits.birthday] as? String, let date: Date = dateFrom(isoDateString: birthday) {
+                Appboy.sharedInstance()?.user.dateOfBirth = date
             }
             if let gender = traits[RSKeys.Identify.Traits.gender] as? String {
                 switch gender.lowercased() {
@@ -106,7 +109,8 @@ class RSBrazeDestination: RSDestinationPlugin {
                 RSKeys.Identify.Traits.address,
                 RSKeys.Identify.Traits.firstName,
                 RSKeys.Identify.Traits.lastName,
-                RSKeys.Identify.Traits.email
+                RSKeys.Identify.Traits.email,
+                RSKeys.Identify.Traits.anonymousId
             ]
             for (key, value) in traits {
                 if appboyTraits.contains(key) {
@@ -134,27 +138,38 @@ class RSBrazeDestination: RSDestinationPlugin {
     }
     
     func track(message: TrackMessage) -> TrackMessage? {
-        switch message.event {
-        case "Install Attributed":
-            var attributionData: ABKAttributionData?
+        if message.event == "Install Attributed" {
             if let campaign = message.properties?["campaign"] as? [String: Any] {
-                attributionData = ABKAttributionData(network: campaign["source"] as? String, campaign: campaign["name"] as? String, adGroup: campaign["ad_group"] as? String, creative: campaign["ad_creative"] as? String)
+                let attributionData: ABKAttributionData = ABKAttributionData(
+                    network: campaign["source"] as? String,
+                    campaign: campaign["name"] as? String,
+                    adGroup: campaign["ad_group"] as? String,
+                    creative: campaign["ad_creative"] as? String
+                )
+                Appboy.sharedInstance()?.user.attributionData = attributionData
             }
-            Appboy.sharedInstance()?.user.attributionData = attributionData
-        case RSEvents.Ecommerce.orderCompleted:
-            if let properties = message.properties, let brazePurchaseList = getBrazePurchaseList(properties: properties) {
-                for brazePurchase in brazePurchaseList {
-                    guard let productId = brazePurchase.productId, let price = brazePurchase.price else {
-                        continue
+            return message
+        }
+        if message.event == RSEvents.Ecommerce.orderCompleted || message.properties?[RSKeys.Ecommerce.revenue] != nil {
+            if let properties = message.properties {
+                if let productList = getProductList(properties: properties) {
+                    for product in productList {
+                        guard let productId = product.productId, let price = product.price else {
+                            continue
+                        }
+                        // For logPurchase API refer to the Braze document: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/analytics/logging_purchases/#tracking-purchases-and-revenue
+                        Appboy.sharedInstance()?.logPurchase(productId, inCurrency: product.currency, atPrice: NSDecimalNumber(value: price), withQuantity: UInt(product.quantity), andProperties: product.properties)
                     }
-                    if let quantity = brazePurchase.quatity {
-                        Appboy.sharedInstance()?.logPurchase(productId, inCurrency: brazePurchase.currency, atPrice: NSDecimalNumber(value: price), withQuantity: UInt(quantity), andProperties: brazePurchase.properties)
-                    } else {
-                        Appboy.sharedInstance()?.logPurchase(productId, inCurrency: brazePurchase.currency, atPrice: NSDecimalNumber(value: price), withProperties: brazePurchase.properties)
-                    }
+                    return message
+                } else if let brazeList = getPurchase(from: properties),
+                            let revenue = brazeList.revenue {
+                    Appboy.sharedInstance()?.logPurchase(message.event, inCurrency: brazeList.currency, atPrice: NSDecimalNumber(value: revenue), withQuantity: 1, andProperties: brazeList.properties)
+                    return message
                 }
             }
-        default:
+        }
+        // Custom event
+        else {
             Appboy.sharedInstance()?.logCustomEvent(message.event, withProperties: message.properties)
         }
         return message
@@ -165,7 +180,9 @@ class RSBrazeDestination: RSDestinationPlugin {
     }
 }
 
+#if os(iOS) || targetEnvironment(macCatalyst)
 extension RSBrazeDestination: RSPushNotifications {
+    // Refer: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/push_notifications/integration/
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Appboy.sharedInstance()?.registerDeviceToken(deviceToken)
     }
@@ -177,62 +194,132 @@ extension RSBrazeDestination: RSPushNotifications {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         Appboy.sharedInstance()?.userNotificationCenter(center, didReceive: response, withCompletionHandler: completionHandler)
     }
+    
+    func pushAuthorizationFromUserNotificationCenter(_ granted: Bool) {
+        Appboy.sharedInstance()?.pushAuthorization(fromUserNotificationCenter: granted)
+    }
 }
+#endif
 
 // MARK: - Support methods
 
 extension RSBrazeDestination {
     var TRACK_RESERVED_KEYWORDS: [String] {
-        return [RSKeys.Ecommerce.productId, RSKeys.Ecommerce.quantity, RSKeys.Ecommerce.price, RSKeys.Ecommerce.products]
+        // Refer: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/analytics/logging_purchases/#reserved-keys
+        return [RSKeys.Ecommerce.productId, RSKeys.Ecommerce.quantity, RSKeys.Ecommerce.price, RSKeys.Ecommerce.products, RSKeys.Ecommerce.currency]
+    }
+    
+    func getLogLevel(from rsLogLevel: RSLogLevel?) -> Int {
+        switch rsLogLevel {
+        case .verbose:
+            return 0
+        case .debug:
+            return 1
+        case .info:
+            return 1
+        case .warning:
+            return 2
+        case .error:
+            return 4
+        default:
+            return 8
+        }
+    }
+    
+    func dateFrom(isoDateString: String?) -> Date? {
+        if let date = isoDateString, !date.isEmpty {
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+            return dateFormatter.date(from: date)
+        }
+        return nil
     }
         
-    func getBrazePurchaseList(properties: [String: Any]) -> [BrazePurchase]? {
+    func getProductList(properties: [String: Any]) -> [BrazePurchase]? { // swiftlint:disable:this cyclomatic_complexity
         var brazePurchaseList = [BrazePurchase]()
-        
-        if let products = properties[RSKeys.Ecommerce.products] as? [[String: Any]] {
+        if let products = properties[RSKeys.Ecommerce.products] as? [[String: Any]], !products.isEmpty {
             for product in products {
-                handleProductData(brazePurchaseList: &brazePurchaseList, productDict: product, propertiesDict: properties)
-            }
-        }
-                
-        func handleProductData(brazePurchaseList: inout [BrazePurchase], productDict: [String: Any], propertiesDict: [String: Any]) {
-            var properties = [String: Any]()
-            var brazePurchase = BrazePurchase()
-            for (key, value) in productDict {
-                switch key {
-                case RSKeys.Ecommerce.productId:
-                    brazePurchase.productId = "\(value)"
-                case RSKeys.Ecommerce.quantity:
-                    brazePurchase.quatity = Int("\(value)")
-                case RSKeys.Ecommerce.price:
-                    brazePurchase.price = Double("\(value)")
-                default:
-                    properties[key] = value
+                if !product.isEmpty {
+                    var tempProductProperties = [String: Any]()
+                    var brazePurchase = BrazePurchase()
+                    for (key, value) in product {
+                        switch key {
+                        case RSKeys.Ecommerce.productId:
+                            brazePurchase.productId = "\(value)"
+                        case RSKeys.Ecommerce.quantity:
+                            brazePurchase.quantity = Int("\(value)") ?? 1
+                        case RSKeys.Ecommerce.price:
+                            brazePurchase.price = Double("\(value)")
+                        default:
+                            tempProductProperties[key] = value
+                        }
+                    }
+                    brazePurchase.properties = tempProductProperties
+                    brazePurchaseList.append(brazePurchase)
                 }
             }
-            for (key, value) in propertiesDict {
+        }
+        
+        // If no product array is present then return
+        if brazePurchaseList.isEmpty {
+            return nil
+        }
+        
+        func getProperty(properties: [String: Any]) -> [String: Any] {
+            var tempProperties = [String: Any]()
+            for (key, value) in properties {
                 if TRACK_RESERVED_KEYWORDS.contains(key) {
                     continue
                 }
                 switch key {
                 case RSKeys.Ecommerce.revenue, RSKeys.Ecommerce.value, RSKeys.Ecommerce.total:
-                    properties[RSKeys.Ecommerce.revenue] = Double("\(value)")
+                    tempProperties[RSKeys.Ecommerce.revenue] = Double("\(value)")
                 default:
-                    properties[key] = value
+                    tempProperties[key] = value
                 }
             }
-            brazePurchase.currency = properties[RSKeys.Ecommerce.currency] as? String ?? "USD"
-            brazePurchase.properties = properties.isEmpty ? nil : properties
-            brazePurchaseList.append(brazePurchase)
+            return tempProperties
         }
-        return brazePurchaseList.isEmpty ? nil : brazePurchaseList
+        let tempProperties = getProperty(properties: properties)
+        
+        // Update the properties for each product in the products array.
+        for index in brazePurchaseList.indices {
+            brazePurchaseList[index].properties = brazePurchaseList[index].properties?
+                .merging(tempProperties, uniquingKeysWith: { (_, last) in last }) ?? tempProperties
+            // Currency should be an ISO 4217 currency code.
+            if let currency = properties[RSKeys.Ecommerce.currency] as? String, currency.count == 3 {
+                brazePurchaseList[index].currency = currency
+            }
+        }
+        return brazePurchaseList
+    }
+    
+    func getPurchase(from properties: [String: Any]) -> BrazePurchase? {
+        var brazePurchaseList = BrazePurchase()
+        var tempProperties = [String: Any]()
+        for (key, value) in properties {
+            if !(key == RSKeys.Ecommerce.currency || key == RSKeys.Ecommerce.revenue) {
+                tempProperties[key] = value
+            }
+        }
+        if let currency = properties[RSKeys.Ecommerce.currency] as? String {
+            brazePurchaseList.currency = currency
+        }
+        if let revenue = properties[RSKeys.Ecommerce.revenue] {
+            brazePurchaseList.revenue = Double("\(revenue)")
+        }
+        brazePurchaseList.properties = tempProperties
+        return brazePurchaseList
     }
 }
 
 struct BrazePurchase {
     var productId: String?
     var price: Double?
-    var quatity: Int?
+    var quantity: Int = 1
+    var revenue: Double?
     var currency: String = "USD"
     var properties: [String: Any]?
 }
