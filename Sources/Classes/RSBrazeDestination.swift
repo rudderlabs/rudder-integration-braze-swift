@@ -180,7 +180,6 @@ class RSBrazeDestination: RSDestinationPlugin {
     }
 }
 
-#if os(iOS) || targetEnvironment(macCatalyst)
 extension RSBrazeDestination: RSPushNotifications {
     // Refer: https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/push_notifications/integration/
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -199,7 +198,6 @@ extension RSBrazeDestination: RSPushNotifications {
         Appboy.sharedInstance()?.pushAuthorization(fromUserNotificationCenter: granted)
     }
 }
-#endif
 
 // MARK: - Support methods
 
