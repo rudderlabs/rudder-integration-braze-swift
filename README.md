@@ -27,8 +27,10 @@
 
 This repository contains the resources and assets required to integrate the [RudderStack iOS SDK](https://www.rudderstack.com/docs/stream-sources/rudderstack-sdk-integration-guides/rudderstack-ios-sdk/ios-v2/) with [Braze](https://www.braze.com/).
 
-| For more information on configuring Braze as a destination in RudderStack and the supported events and their mappings, refer to the [Braze documentation](https://www.rudderstack.com/docs/destinations/streaming-destinations/braze/).   |
-| :--|
+For more information on configuring Braze as a destination in RudderStack and the supported events and their mappings, refer to the [Braze documentation](https://www.rudderstack.com/docs/destinations/streaming-destinations/braze/).
+
+| Important: This device mode integration is supported for Braze v4.4.4 and above.|
+| :---|
 
 
 ## Step 1: Integrate the SDK with Braze
@@ -40,9 +42,25 @@ This repository contains the resources and assets required to integrate the [Rud
 pod 'RudderBraze', '~> 1.0.0'
 ```
 
-## Step 2: Initialize the RudderStack client (`RSClient`)
+3. Run the `pod install` command.
 
-Place the following code in your ```AppDelegate``` under the ```didFinishLaunchingWithOptions``` method:
+## Step 2: Import the SDK
+
+### Swift
+
+```swift
+import RudderBraze
+```
+
+### Objective C
+
+```objectivec
+@import RudderBraze;
+```
+
+## Step 3: Initialize the RudderStack client (`RSClient`)
+
+Place the following code in your `AppDelegate` file under the `didFinishLaunchingWithOptions` method:
 
 ### Objective C
 
@@ -60,13 +78,15 @@ let config: RSConfig = RSConfig(writeKey: WRITE_KEY)
 RSClient.sharedInstance().configure(with: config)
 RSClient.sharedInstance().addDestination(RudderBrazeDestination())
 ```
-## Step 3: Send events
+## Step 4: Send events
 
 Follow the steps listed in the [RudderStack iOS SDK](https://github.com/rudderlabs/rudder-sdk-ios/tree/master-v2#sending-events) repo to start sending events to Braze.
 
-## Making push notifications event
+### Sending push notification events
 
-Place the following code in your ```AppDelegate``` under the ```didFinishLaunchingWithOptions``` method:
+To send your push notification events to Braze, follow these steps:
+
+1. Place the following code in your `AppDelegate` file under the `didFinishLaunchingWithOptions` method:
 
 ### Objective C
 
@@ -112,7 +132,7 @@ if #available(iOS 10, *) {
 }
 ```
 
-Provide either either a `.p8` file (recommended) or a `.p12` certificate push notification file or certificate from Apple. Refer [Braze docs](https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/push_notifications/integration/#step-1-configure-push-notifications) for more details and then implement following push notification methods:
+2. Provide either a `.p8` file (recommended) or a `.p12` certificate push notification file or certificate from Apple. Refer to the [Braze documentation](https://www.braze.com/docs/developer_guide/platform_integration_guides/ios/push_notifications/integration/#step-1-configure-push-notifications) for more details. Implement the following push notification methods:
 
 ### Objective C
 ```objective-c
