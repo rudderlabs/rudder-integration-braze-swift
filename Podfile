@@ -11,7 +11,7 @@ end
 target 'RudderBraze' do
     project 'RudderBraze.xcodeproj'
     shared_pods
-    pod 'Appboy-iOS-SDK', '~> 4.4.2'
+    pod 'Appboy-iOS-SDK', '~> 4.7.0'
 end
 
 target 'SampleAppObjC' do

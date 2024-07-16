@@ -1,31 +1,31 @@
 PODS:
-  - Appboy-iOS-SDK (4.4.4):
-    - Appboy-iOS-SDK/UI (= 4.4.4)
-  - Appboy-iOS-SDK/ContentCards (4.4.4):
+  - Appboy-iOS-SDK (4.7.0):
+    - Appboy-iOS-SDK/UI (= 4.7.0)
+  - Appboy-iOS-SDK/ContentCards (4.7.0):
     - Appboy-iOS-SDK/Core
-    - SDWebImage (< 6, >= 5.8.2)
-  - Appboy-iOS-SDK/Core (4.4.4)
-  - Appboy-iOS-SDK/InAppMessage (4.4.4):
+    - SDWebImage (< 6, >= 5.18.7)
+  - Appboy-iOS-SDK/Core (4.7.0)
+  - Appboy-iOS-SDK/InAppMessage (4.7.0):
     - Appboy-iOS-SDK/Core
-    - SDWebImage (< 6, >= 5.8.2)
-  - Appboy-iOS-SDK/NewsFeed (4.4.4):
+    - SDWebImage (< 6, >= 5.18.7)
+  - Appboy-iOS-SDK/NewsFeed (4.7.0):
     - Appboy-iOS-SDK/Core
-    - SDWebImage (< 6, >= 5.8.2)
-  - Appboy-iOS-SDK/UI (4.4.4):
+    - SDWebImage (< 6, >= 5.18.7)
+  - Appboy-iOS-SDK/UI (4.7.0):
     - Appboy-iOS-SDK/ContentCards
     - Appboy-iOS-SDK/Core
     - Appboy-iOS-SDK/InAppMessage
     - Appboy-iOS-SDK/NewsFeed
   - Rudder (2.2.4)
-  - RudderBraze (1.0.0):
-    - Appboy-iOS-SDK (~> 4.4.4)
+  - RudderBraze (1.1.0):
+    - Appboy-iOS-SDK (~> 4.7.0)
     - Rudder (~> 2.2.4)
-  - SDWebImage (5.13.2):
-    - SDWebImage/Core (= 5.13.2)
-  - SDWebImage/Core (5.13.2)
+  - SDWebImage (5.19.4):
+    - SDWebImage/Core (= 5.19.4)
+  - SDWebImage/Core (5.19.4)
 
 DEPENDENCIES:
-  - Appboy-iOS-SDK (~> 4.4.2)
+  - Appboy-iOS-SDK (~> 4.7.0)
   - Rudder
   - RudderBraze (from `.`)
 
@@ -40,11 +40,11 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Appboy-iOS-SDK: b05b957ab645d0a9a43d3f35195ad69202b89edc
+  Appboy-iOS-SDK: 17ac57fb7094158279ee1847b145336bbad4abf0
   Rudder: 5fb72ab3d09de72cab0a949aa7b1aad2f24947f9
-  RudderBraze: 38c6016922af3dc1b0f01163de81be325dee4dce
-  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
+  RudderBraze: a2613d51ccf07ab58118af181511be611f001963
+  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
 
-PODFILE CHECKSUM: e02b1d2901f8bd87de9449847b6e243a9e8ddee8
+PODFILE CHECKSUM: 50653befea1d65ad085cb0983ee580fc9e34d353
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2

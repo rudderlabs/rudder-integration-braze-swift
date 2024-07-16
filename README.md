@@ -29,7 +29,7 @@ This repository contains the resources and assets required to integrate the [Rud
 
 For more information on configuring Braze as a destination in RudderStack and the supported events and their mappings, refer to the [Braze documentation](https://www.rudderstack.com/docs/destinations/streaming-destinations/braze/).
 
-| Important: This device mode integration is supported for Braze v4.4.4 and above.|
+| Important: This device mode integration is supported for Braze v4.7.0 and above.|
 | :---|
 
 
@@ -39,7 +39,7 @@ For more information on configuring Braze as a destination in RudderStack and th
 2. `RudderBraze` is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile and followed by `pod install`, as shown:
 
 ```ruby
-pod 'RudderBraze', '~> 1.0.0'
+pod 'RudderBraze', '~> 1.1.0'
 ```
 
 3. Run the `pod install` command.
@@ -104,9 +104,18 @@ if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
   }];
   [[UIApplication sharedApplication] registerForRemoteNotifications];
 } else {
-  UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
-  [[UIApplication sharedApplication] registerForRemoteNotifications];
-  [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionAlert | UNAuthorizationOptionSound)
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                });
+            } else {
+                // Handle error or denial
+            }
+        }];
 }
 ```
 
