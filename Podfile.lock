@@ -16,13 +16,13 @@ PODS:
     - Appboy-iOS-SDK/Core
     - Appboy-iOS-SDK/InAppMessage
     - Appboy-iOS-SDK/NewsFeed
-  - Rudder (2.2.4)
+  - Rudder (2.2.7)
   - RudderBraze (1.1.0):
     - Appboy-iOS-SDK (~> 4.7.0)
     - Rudder (~> 2.2.4)
-  - SDWebImage (5.19.4):
-    - SDWebImage/Core (= 5.19.4)
-  - SDWebImage/Core (5.19.4)
+  - SDWebImage (5.19.7):
+    - SDWebImage/Core (= 5.19.7)
+  - SDWebImage/Core (5.19.7)
 
 DEPENDENCIES:
   - Appboy-iOS-SDK (~> 4.7.0)
@@ -41,9 +41,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Appboy-iOS-SDK: 17ac57fb7094158279ee1847b145336bbad4abf0
-  Rudder: 5fb72ab3d09de72cab0a949aa7b1aad2f24947f9
+  Rudder: 2347c09aee69232812e8262b28d72b69df677940
   RudderBraze: a2613d51ccf07ab58118af181511be611f001963
-  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
+  SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
 
 PODFILE CHECKSUM: 50653befea1d65ad085cb0983ee580fc9e34d353
 
