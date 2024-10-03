@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = 'RudderBraze'
-    s.version          = '1.1.0'
+    s.version          = '1.2.0'
     s.summary          = 'Privacy and Security focused Segment-alternative. Braze Native SDK integration support.'
 
     s.description      = <<-DESC
@@ -8,7 +8,7 @@ Rudder is a platform for collecting, storing and routing customer event data to 
                        DESC
 
     s.homepage         = 'https://github.com/rudderlabs/rudder-integration-braze-swift'
-    s.license          = { :type => "Apache", :file => "LICENSE" }
+    s.license          = { :type => "Elastic License 2.0", :file => "LICENSE.md" }
     s.author           = { 'RudderStack' => 'arnab@rudderlabs.com' }
     s.source           = { :git => 'https://github.com/rudderlabs/rudder-integration-braze-swift.git', :tag => "v#{s.version}" }
 
