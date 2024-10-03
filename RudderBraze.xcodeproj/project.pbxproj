@@ -13,12 +13,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		534D5B782CAABDB900CB9F5A /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		98603F9DFE91C89BC01A7FC2 /* Pods-RudderBraze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.release.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.release.xcconfig"; sourceTree = "<group>"; };
 		B8E06D351BC2E7AD904CBD93 /* Pods_RudderBraze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RudderBraze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D494C2F9E5F792AF26524164 /* Pods-RudderBraze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RudderBraze.debug.xcconfig"; path = "Target Support Files/Pods-RudderBraze/Pods-RudderBraze.debug.xcconfig"; sourceTree = "<group>"; };
 		ED2A28EB2770560400646788 /* RudderBraze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RudderBraze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2A28F72770570400646788 /* RudderBraze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RudderBraze.h; sourceTree = "<group>"; };
-		ED2A28FA2770591E00646788 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		ED2A28FC2770591E00646788 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		ED2A28FD2770591E00646788 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EDAA6F0E283DFF4C008ABB0C /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				EDAA6F0E283DFF4C008ABB0C /* CHANGELOG.md */,
-				ED2A28FA2770591E00646788 /* LICENSE */,
+				534D5B782CAABDB900CB9F5A /* LICENSE.md */,
 				ED2A28FD2770591E00646788 /* Podfile */,
 				ED2A28FC2770591E00646788 /* README.md */,
 				EDC132B127D9DBF400AFD833 /* RudderBraze.podspec */,

@@ -7,7 +7,12 @@
 
 import Foundation
 import Rudder
+
+#if canImport(Appboy_iOS_SDK)
 import Appboy_iOS_SDK
+#elseif canImport(AppboyKit)
+import AppboyKit
+#endif
 
 class RSBrazeDestination: RSDestinationPlugin {
     let type = PluginType.destination
