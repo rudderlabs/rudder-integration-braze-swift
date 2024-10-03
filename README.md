@@ -36,13 +36,33 @@ For more information on configuring Braze as a destination in RudderStack and th
 ## Step 1: Integrate the SDK with Braze
 
 1. Add [Braze](https://www.braze.com/) as a destination in the [RudderStack dashboard](https://app.rudderstack.com/).
-2. `RudderBraze` is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile and followed by `pod install`, as shown:
+2. `RudderBraze` is available through [CocoaPods](https://cocoapods.org) and [Swift Package Manager (SPM)](https://www.swift.org/package-manager/). 
+
+### CocoaPods
+Add the following line to your Podfile and followed by `pod install`:
 
 ```ruby
 pod 'RudderBraze', '~> 1.1.0'
 ```
 
-3. Run the `pod install` command.
+### Swift Package Manager (SPM)
+
+You can also add the RudderStack iOS SDK via Swift Package Mangaer.
+
+* Go to **File** -> **Add Package**, as shown:
+
+![add_package](screenshots/add_package.png) 
+
+* Enter the package repository (`https://github.com/rudderlabs/rudder-integration-braze-swift`) in the search bar.
+
+*  In **Dependency Rule**, select **Exact Version** and enter latest as the value, as shown:
+
+![add_package](screenshots/set_dependency.png)
+
+* Select the project to which you want to add the package.
+
+* Finally, click on **Add Package**.
+
 
 ## Step 2: Import the SDK
 
